@@ -1,19 +1,47 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+import { StrictMode } from "react";
+import { createRoot } from "react-dom/client";
 
-const root = ReactDOM.createRoot(
-  document.getElementById('root') as HTMLElement
+
+import App from "./App";
+
+import { createStore, applyMiddleware, Dispatch, ActionCreator, Action } from "redux";
+import { Provider, TypedUseSelectorHook, useSelector, useDispatch } from "react-redux";
+import { rootReducer } from "./redux/reducers/rootReducer";
+import thunk, { ThunkAction, ThunkDispatch } from "redux-thunk";
+import { composeWithDevTools } from "redux-devtools-extension";
+import React from "react";
+import { TActions } from "./redux/reducers/types/todosTypes";
+import { ISetFilterAction } from "./redux/reducers/types/filterTabs";
+
+const store = createStore(
+  rootReducer,
+  composeWithDevTools(applyMiddleware(thunk))
 );
+
+export type RootState = ReturnType<typeof store.getState>; //главный стейт
+export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector; //типизация useSelector
+
+// Типизация метода dispatch для проверки на валидность отправляемого экшена
+export type AppDispatch = Dispatch<TActions | ISetFilterAction>;
+
+// Типизация всех экшенов приложения
+type TApplicationActions = TActions | ISetFilterAction;
+
+
+// Типизация thunk в нашем приложении
+export type AppThunk<TReturn = void> = ActionCreator<
+  ThunkAction<TReturn, Action, RootState, TApplicationActions>
+>;
+
+
+export const useAppDispatch = () => useDispatch<any>()
+
+const root = createRoot(document.getElementById("root") as HTMLElement);
+
 root.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
+  <StrictMode>
+    <Provider store={store}>
+      <App />
+    </Provider>
+  </StrictMode>
 );
-
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();

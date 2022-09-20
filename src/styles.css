@@ -1,0 +1,39 @@
+.App {
+  font-family: sans-serif;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.wrapper {
+  width: 600px;
+  min-height: 350px;
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.header h4 {
+  margin: 0;
+  padding: 18px;
+  font-size: 18px;
+  text-align: left;
+}
+
+.btns {
+  display: flex;
+  padding: 20px;
+}
+
+.spinner {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 60px;
+}
+
+.spin {
+  width: 0;
+  height: 0;
+}
